@@ -6,7 +6,13 @@ import { BiSolidEdit } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { deletePatient } from "../redux/patientsSlice";
 
-function Crud({ openCloseAddBtn, openCloseEditBtn, showModal, selectedIndex }) {
+function Crud({
+  openCloseAddBtn,
+  openCloseEditBtn,
+  showModal,
+  selectedIndex,
+  setSelectedIndex,
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -17,6 +23,7 @@ function Crud({ openCloseAddBtn, openCloseEditBtn, showModal, selectedIndex }) {
 
   const handleOk = () => {
     setIsModalOpen(false);
+    setSelectedIndex();
     dispatch(deletePatient(selectedIndex));
   };
 

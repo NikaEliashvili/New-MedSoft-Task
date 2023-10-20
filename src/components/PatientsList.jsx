@@ -44,11 +44,11 @@ function PatientsList() {
     setDataSource((prev) => {
       return patients.map((patient) => ({
         key: patient?.id,
-        ID: patient?.id,
+        id: patient?.id,
         fullName: patient?.fullName,
         personalNum: patient?.personalNum,
         dob: new Date(patient?.dob).toLocaleDateString("en-GB"),
-        gender: patient?.genderId === 0 ? "მდედრობითი" : "მამრობითი",
+        gender: patient?.genderId == 0 ? "მდედრობითი" : "მამრობითი",
         genderId: patient?.genderId,
         phone: patient?.phone,
         email: patient?.email,
@@ -60,8 +60,8 @@ function PatientsList() {
   const columns = [
     {
       title: "ID",
-      dataIndex: "ID",
-      key: "ID",
+      dataIndex: "id",
+      key: "id",
     },
     {
       title: "პაციენტის გვარი სახელი",
@@ -106,19 +106,20 @@ function PatientsList() {
         openCloseEditBtn={openCloseEditBtn}
         showModal={showModal}
         selectedIndex={selectedIndex}
+        setSelectedIndex={() => setSelectedIndex(null)}
       />
       <div className="table-container">
         <Table
           rowClassName={(curRow) =>
-            curRow.ID === selectedIndex ? "active" : ""
+            curRow.id === selectedIndex ? "active" : ""
           }
           onRow={(record, rowIndex) => {
             return {
               onClick: (e) => {
-                if (record.ID === selectedIndex) {
+                if (record.id === selectedIndex) {
                   setSelectedIndex(null);
                 } else {
-                  setSelectedIndex(record.ID);
+                  setSelectedIndex(record.id);
                 }
               },
             };
@@ -138,7 +139,7 @@ function PatientsList() {
         (openModal && isEditBtn && (
           <PatientForm
             patient={
-              dataSource.filter((patient) => patient.ID === selectedIndex)[0]
+              dataSource?.filter((patient) => patient.id === selectedIndex)[0]
             }
             openModal={openModal}
             handleCancel={handleCancel}

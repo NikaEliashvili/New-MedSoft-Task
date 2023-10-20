@@ -10,17 +10,30 @@ function AddPatientForm({ handleCancel, openModal, patient }) {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
-  console.log("Gender ID: ", patient);
+
+  const formatPhoneNumber = (value) => {
+    // Remove non-digit characters from the input value
+    const phoneNumber = value.replace(/\D/g, "");
+
+    // Format the phone number as xxx-xxx-xxx
+    const formattedPhoneNumber = phoneNumber
+      .slice(0, 9)
+      .replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3");
+
+    return formattedPhoneNumber;
+  };
+
   const handleOk = () => {
     form
       .validateFields()
       .then((values) => {
         let modifiedValues = { ...values };
         if (patient) {
+          console.log("Values: ", values);
           modifiedValues = {
             ...values,
             dob: new Date(values?.dob).getTime(),
-            genderId: values?.gender === "მდედრობითი" ? 0 : 1,
+            genderId: parseInt(values?.genderId),
           };
         }
         onFinish(modifiedValues);
@@ -41,8 +54,8 @@ function AddPatientForm({ handleCancel, openModal, patient }) {
       console.log("Success:", values);
       dispatch(addPatient(values));
     } else {
-      console.log("Success:", values, patient.ID);
-      dispatch(updatePatient({ ...values, id: patient?.ID }));
+      console.log("Success:", values, patient.id);
+      dispatch(updatePatient({ ...values, id: patient?.id }));
     }
   };
 
@@ -89,8 +102,7 @@ function AddPatientForm({ handleCancel, openModal, patient }) {
             name="personalNum"
             rules={[
               {
-                required: true,
-                message: "გთხოვთ შეიყვანოთ პირადი ნომერი",
+                required: false,
               },
               {
                 pattern: /^\d+$/,
@@ -112,36 +124,53 @@ function AddPatientForm({ handleCancel, openModal, patient }) {
             rules={[
               {
                 required: true,
-                message: "Please input your dob!",
+                message: "გთხოვთ შეიყვანოთ დაბადების თარიღი",
               },
             ]}
           >
             <DatePicker format={dateFormat} />
           </Form.Item>
           <Form.Item
-            initialValue={!patient ? null : patient?.gender}
+            initialValue={
+              !patient
+                ? null
+                : (patient?.genderId == 1 && "მამრობითი") ||
+                  (patient?.genderId == 0 && "მდედრობითი")
+            }
             name="genderId"
             label="სქესი: "
             rules={[
               {
                 required: true,
-                message: "Please select your gender!",
+                message: "აირჩიეთ სქესი!",
               },
             ]}
           >
             <Select placeholder="სქესი...">
-              <Select.Option value={"0"}>მდედრობითი</Select.Option>
               <Select.Option value={"1"}>მამრობითი</Select.Option>
+              <Select.Option value={"0"}>მდედრობითი</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item
             initialValue={!patient ? null : patient?.phone}
             label="მობ. ნომერი:"
             name="phone"
+            type="phone"
             rules={[
               {
-                required: true,
-                message: "Please input your phone!",
+                required: false,
+              },
+              {
+                pattern: /^5/,
+                message: "მობ. ნომერი უნდა იწყებოდეს 5-ით",
+              },
+              {
+                pattern: /^\d{9}$/,
+                message: "მობ. ნომერი უნდა შეიცავდეს 9 ციფრს!",
+              },
+              {
+                pattern: /\d/,
+                message: "გამოიყენეთ მხოლოდ ციფრები!",
               },
             ]}
           >
@@ -151,14 +180,32 @@ function AddPatientForm({ handleCancel, openModal, patient }) {
             initialValue={!patient ? null : patient?.email}
             label="ელ. ფოსტა:"
             name="email"
+            type="email"
             rules={[
               {
-                required: true,
-                message: "Please input your email!",
+                required: false,
+              },
+              {
+                pattern:
+                  /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?$/,
+                message: "მიუთითეთ სწორი ელ.ფოსტა",
               },
             ]}
           >
-            <Input type="email" />
+            <Input />
+          </Form.Item>
+          <Form.Item
+            initialValue={!patient ? null : patient?.address}
+            label="მისამართი:"
+            name="address"
+            type="address"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <Input />
           </Form.Item>
         </Form>
       </Modal>
