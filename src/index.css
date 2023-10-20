@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+    padding-inline: 5rem;
+}
+
+.table-container {
+    overflow-y: auto;
+}
+
+.icon {
+    color: green;
+    align-self: last baseline;
+}
+
+.ant-btn-primary {
+    display: flex;
+    align-items: center;
+    background-color: whitesmoke;
+    border-color: rgb(238, 236, 236);
+    color: black;
+    font-weight: 600;
+    color: rgb(49, 45, 45);
+    transition: 0.3s;
+}
+
+/* 
+.ant-btn.ant-btn-primary:hover,
+.ant-btn-primary:hover {
+    background-color: rgb(226, 222, 222);
+    color: red;
+
+} */
+
+@media (max-width: 1200px) {
+    body {
+        padding-inline: 2rem;
+    }
+
+}
+
+@media (max-width: 800px) {
+    body {
+        padding-inline: 1rem;
+    }
+
+}
+
+@media (max-width: 600px) {
+    body {
+        padding-inline: 0.3rem;
+    }
+
+}
+
+@media (max-width: 390px) {
+    body {
+        padding-inline: 0.1rem;
+    }
+
+}

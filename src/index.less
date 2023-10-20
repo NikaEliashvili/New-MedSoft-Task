@@ -1,0 +1,117 @@
+
+body {
+    margin: 0;
+    padding-inline: 5rem;
+  
+    @media (max-width: 1200px) {
+      padding-inline: 2rem;
+    }
+  
+    @media (max-width: 800px) {
+      padding-inline: 1rem;
+    }
+  
+    @media (max-width: 600px) {
+      padding-inline: 0.3rem;
+    }
+  
+    @media (max-width: 390px) {
+      padding-inline: 0.1rem;
+    }
+  }
+  
+  .table-container {
+    overflow-y: auto;
+  }
+  
+ 
+  
+  
+
+  .buttons-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 5rem;
+    margin-bottom: 1rem;
+  
+    .icon.plus{
+      color: rgb(12, 179, 12);
+    }
+    .icon.edit{
+      color: rgb(255, 111, 0);
+    }
+    .icon.delete{
+      color: rgb(243, 17, 17);
+    }
+    .icon-plus,.icon-edit,.icon-delete {
+      margin-right: 0.5rem;
+    }
+  
+    button.ant-btn.css-dev-only-do-not-override-3mqfnx.ant-btn-default, &:disabled
+    {
+      display: flex;
+      align-items: center;
+      background-color: whitesmoke;
+      border-color: rgb(238, 236, 236);
+      font-weight: 600;
+      color: rgb(37, 35, 35);
+      border: none;
+      outline: none;
+      border: 2px solid whitesmoke;
+      text-rendering: auto;
+      transition: all 0.3s;
+      
+      &:hover{
+        color: black;
+        filter: brightness(0.95);
+        color: black;
+      }
+      
+      &:disabled {
+          background-color: whitesmoke;
+          color: #bfbfbf;
+          .icon{
+            opacity: 0.4;
+            
+          }
+          &:hover {
+            filter: none;
+            background-color: whitesmoke;
+            transform: none;
+          }
+
+      }
+    }
+  }
+
+
+  .ant-table-tbody .ant-table-row.ant-table-row-level-0 {
+    .ant-table-cell{
+      cursor: default;
+    }
+    
+    &:hover{
+      .ant-table-cell{
+        background-color: rgba(147, 211, 238, 0.4);
+      }
+    }
+  }
+  .ant-table-tbody .ant-table-row.ant-table-row-level-0.active {
+    background-color: rgba(147, 211, 238,0.6);
+    &:hover{
+      .ant-table-cell{
+        cursor: auto;
+        background-color: rgba(147, 211, 238,0.6);
+      }
+    }
+  }
+ 
+
+  .ant-modal.css-dev-only-do-not-override-3mqfnx{
+    width: 10rem;
+    .ant-btn.css-dev-only-do-not-override-3mqfnx.ant-btn-default.ant-btn-dangerous{
+      background-color: red;
+      color: white;
+    }
+  }
+  
