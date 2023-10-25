@@ -1,19 +1,24 @@
 
+
+
+
+
 body {
-    margin: 0;
-    padding-inline: 5rem;
+  margin: 0;
+  padding-inline: 5rem;
   
-    @media (max-width: 1200px) {
-      padding-inline: 2rem;
-    }
   
-    @media (max-width: 800px) {
-      padding-inline: 1rem;
-    }
+  @media (max-width: 1200px) {
+    padding-inline: 2rem;
+  }
   
-    @media (max-width: 600px) {
-      padding-inline: 0.3rem;
-    }
+  @media (max-width: 800px) {
+    padding-inline: 1rem;
+  }
+  
+  @media (max-width: 600px) {
+    padding-inline: 0.3rem;
+  }
   
     @media (max-width: 390px) {
       padding-inline: 0.1rem;
@@ -22,6 +27,8 @@ body {
   
   .table-container {
     overflow-y: auto;
+    z-index: 1;
+
   }
   
  
@@ -86,6 +93,7 @@ body {
 
 
   .ant-table-tbody .ant-table-row.ant-table-row-level-0 {
+    
     .ant-table-cell{
       cursor: default;
     }
@@ -114,4 +122,37 @@ body {
       color: white;
     }
   }
+  
+  .ant-flex.css-dev-only-do-not-override-3mqfnx.patient-info{
+    box-shadow: 0 2px 10px 5px rgba(0, 0, 0, 0.05);
+    margin-top: 1rem;
+    background-color: rgba(147, 211, 238,0.6);
+    border-radius: 0.4rem;
+    transition: 0.5s;
+    overflow: auto;
+    &.patient-anim{
+      animation: infoAnim 0.3s ease-in 1 alternate ;
+    }
+    div{
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: rgb(27, 70, 88);
+      border-right: 2px solid rgba(147, 211, 238,1);
+    }
+   
+    @keyframes infoAnim {
+      0%{
+        opacity: 0.2;
+      }
+     
+      100%{
+        opacity: 1;
+      }
+    }
+  
+  }
+
   

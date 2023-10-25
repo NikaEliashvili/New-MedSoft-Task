@@ -1,21 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchPatients } from "../redux/patientsSlice";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedPatient } from "../redux/patientActions";
+import { fetchPatientsData } from "../axiosFunctions";
 import { Table } from "antd";
 
 import PatientForm from "./PatientForm";
 import Crud from "./Crud";
+import SelectedPatient from "./SelectedPatient";
+
+const apiUrl = "https://64d3873467b2662bf3dc5f5b.mockapi.io/family/patients/";
 
 export const dateFormat = "DD/MM/YYYY";
 
 function PatientsList() {
-  const dispatch = useDispatch();
-  const patients = useSelector((state) => state.patients);
+  const [patientsData, setPatientsData] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [isAddBtn, setIsAddBtn] = useState(false);
   const [isEditBtn, setIsEditBtn] = useState(false);
+  const [isDeleteBtn, setIsDeleteBtn] = useState(false);
+
+  const dispatch = useDispatch();
+  const selectedPatient = useSelector((state) => state.selectedPatient);
+  function updatePatientsData(newData) {
+    setPatientsData(newData);
+  }
 
   const openCloseAddBtn = (bool) => {
     setIsAddBtn(bool);
@@ -23,26 +34,26 @@ function PatientsList() {
   const openCloseEditBtn = (bool) => {
     setIsEditBtn(bool);
   };
+  const setDelete = () => {
+    setIsDeleteBtn((prev) => !prev);
+  };
 
   const showModal = () => {
-    console.log("Clicked Show button");
     setOpenModal(true);
   };
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     openCloseAddBtn(false);
     openCloseEditBtn(false);
     setOpenModal(false);
   };
 
   useEffect(() => {
-    dispatch(fetchPatients());
-  }, [dispatch]);
+    axios.get(apiUrl).then((res) => setPatientsData(res.data));
+  }, [isAddBtn, isEditBtn, isDeleteBtn]);
 
   useEffect(() => {
-    console.log(patients);
     setDataSource((prev) => {
-      return patients.map((patient) => ({
+      return patientsData.map((patient) => ({
         key: patient?.id,
         id: patient?.id,
         fullName: patient?.fullName,
@@ -55,7 +66,7 @@ function PatientsList() {
         address: patient?.address,
       }));
     });
-  }, [patients]);
+  }, [patientsData, fetchPatientsData]);
 
   const columns = [
     {
@@ -104,9 +115,13 @@ function PatientsList() {
       <Crud
         openCloseAddBtn={openCloseAddBtn}
         openCloseEditBtn={openCloseEditBtn}
+        handleCancelParent={handleCancel}
         showModal={showModal}
         selectedIndex={selectedIndex}
         setSelectedIndex={() => setSelectedIndex(null)}
+        setDelete={setDelete}
+        isDeleteBtn={isDeleteBtn}
+        updatePatientsData={updatePatientsData}
       />
       <div className="table-container">
         <Table
@@ -117,8 +132,11 @@ function PatientsList() {
             return {
               onClick: (e) => {
                 if (record.id === selectedIndex) {
+                  dispatch(setSelectedPatient(null));
                   setSelectedIndex(null);
                 } else {
+                  console.log(record);
+                  dispatch(setSelectedPatient(record));
                   setSelectedIndex(record.id);
                 }
               },
@@ -129,6 +147,7 @@ function PatientsList() {
           pagination={false}
         />
       </div>
+      <SelectedPatient patient={selectedPatient} />
       {(openModal && isAddBtn && (
         <PatientForm
           patient={null}

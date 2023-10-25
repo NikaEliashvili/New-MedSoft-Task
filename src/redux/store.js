@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import patientsReducer from "../redux/patientsSlice";
+import patientReducer from "./patientReducer";
 
 export const store = configureStore({
   reducer: {
-    patients: patientsReducer,
+    selectedPatient: patientReducer,
   },
 });

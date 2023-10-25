@@ -4,7 +4,8 @@ import { HiOutlinePlus, HiX } from "react-icons/hi";
 import { BiSolidEdit } from "react-icons/bi";
 
 import { useDispatch } from "react-redux";
-import { deletePatient } from "../redux/patientsSlice";
+import { setSelectedPatient } from "../redux/patientActions";
+import { deletePatientData } from "../axiosFunctions";
 
 function Crud({
   openCloseAddBtn,
@@ -12,22 +13,32 @@ function Crud({
   showModal,
   selectedIndex,
   setSelectedIndex,
+  setDelete,
 }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const dispatch = useDispatch();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const showDeleteConfirm = () => {
     setIsModalOpen(true);
   };
 
   const handleOk = () => {
-    setIsModalOpen(false);
+    setConfirmLoading(true);
     setSelectedIndex();
-    dispatch(deletePatient(selectedIndex));
+    deletePatientData(selectedIndex);
+
+    setTimeout(() => {
+      setDelete();
+      setIsModalOpen(false);
+      setConfirmLoading(false);
+      dispatch(setSelectedPatient(null));
+    }, 2000);
   };
 
   const handleCancel = () => {
+    setDelete();
     setIsModalOpen(false);
   };
   return (
@@ -69,6 +80,7 @@ function Crud({
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        confirmLoading={confirmLoading}
         cancelText="გაუქმება"
         okText="წაშლა"
         okType="danger"

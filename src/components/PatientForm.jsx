@@ -1,27 +1,16 @@
 import React, { useState } from "react";
 import { Form, Modal, Input, Select, DatePicker } from "antd";
+import { useDispatch } from "react-redux";
+import { setSelectedPatient } from "../redux/patientActions";
 import dayjs from "dayjs";
 import { dateFormat } from "./PatientsList";
-
-import { useDispatch } from "react-redux";
-import { addPatient, updatePatient } from "../redux/patientsSlice";
+import { AddPatientData, updatePatientData } from "../axiosFunctions";
 
 function AddPatientForm({ handleCancel, openModal, patient }) {
   const dispatch = useDispatch();
+
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
-
-  const formatPhoneNumber = (value) => {
-    // Remove non-digit characters from the input value
-    const phoneNumber = value.replace(/\D/g, "");
-
-    // Format the phone number as xxx-xxx-xxx
-    const formattedPhoneNumber = phoneNumber
-      .slice(0, 9)
-      .replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3");
-
-    return formattedPhoneNumber;
-  };
 
   const handleOk = () => {
     form
@@ -29,7 +18,6 @@ function AddPatientForm({ handleCancel, openModal, patient }) {
       .then((values) => {
         let modifiedValues = { ...values };
         if (patient) {
-          console.log("Values: ", values);
           modifiedValues = {
             ...values,
             dob: new Date(values?.dob).getTime(),
@@ -41,8 +29,8 @@ function AddPatientForm({ handleCancel, openModal, patient }) {
         setTimeout(() => {
           handleCancel();
           setConfirmLoading(false);
-          form.resetFields(); // Reset form fields
-        }, 2000);
+          form.resetFields();
+        }, 1000);
       })
       .catch((errorInfo) => {
         console.log("Validation Error:", errorInfo);
@@ -51,11 +39,10 @@ function AddPatientForm({ handleCancel, openModal, patient }) {
 
   const onFinish = (values) => {
     if (!patient) {
-      console.log("Success:", values);
-      dispatch(addPatient(values));
+      AddPatientData(values);
     } else {
-      console.log("Success:", values, patient.id);
-      dispatch(updatePatient({ ...values, id: patient?.id }));
+      updatePatientData({ ...values, id: patient?.id });
+      dispatch(setSelectedPatient(values));
     }
   };
 
@@ -202,6 +189,10 @@ function AddPatientForm({ handleCancel, openModal, patient }) {
             rules={[
               {
                 required: false,
+              },
+              {
+                pattern: /^[ა-ჰ ]+$/,
+                message: "შეიყვანეთ მხოლოდ ქართული ასოები",
               },
             ]}
           >
